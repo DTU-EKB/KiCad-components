@@ -19,11 +19,11 @@
       },
       "versions": [
         {
-        "version": "0.2",
-        "status": "development",
-        "kicad_version": "9.0",
-        "download_url": ""https://github.com/DTU-EKB/KiCad-components/releases/dtu-ekb-components-0.2-alpha.zip",
-        "download_sha256": "8dce140b11fa1d6ab5d9dfb61c9ffd2766e4f38090b7b2542aa58555a7d78730",
+          "version": "0.2",
+          "status": "development",
+          "kicad_version": "9.0",
+          "download_url": "https://github.com/DTU-EKB/KiCad-components/releases/download/v0.2/dtu-ekb-components-0.2-alpha.zip",
+          "download_sha256": "8dce140b11fa1d6ab5d9dfb61c9ffd2766e4f38090b7b2542aa58555a7d78730",
           "download_size": 4509,
           "install_size": 2478
         },

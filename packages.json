@@ -1,0 +1,33 @@
+{
+  "packages": [
+    {
+      "$schema": "https://go.kicad.org/pcm/schemas/v2",
+      "name": "DTU and EKB Components Library",
+      "description": "Collaborative KiCad library for DTU Ballerup Campus.",
+      "description_full": "A collaborative collection of KiCad symbols, footprints, 3D models, and datasheet-linked components, maintained for students at DTU Ballerup Campus. The goal is to provide consistent, verified components for coursework and projects.",
+      "identifier": "com.github.dtu-ekb.kicad-components",
+      "type": "library",
+      "author": {
+        "name": "DTU and EKB Contributors",
+        "contact": {
+          "github": "https://github.com/DTU-EKB/KiCad-components"
+        }
+      },
+      "license": "MIT",
+      "resources": {
+        "Repository": "https://github.com/DTU-EKB/KiCad-components"
+      },
+      "versions": [
+        {
+          "version": "0.1",
+          "status": "development",
+          "kicad_version": "9.0",
+          "download_url": "https://github.com/DTU-EKB/KiCad-components/releases/dtu-ekb-components-0.1-alpha.zip",
+          "download_sha256": "cca4dddb65972b6cea7e7cbcf646be7db9d85cb74da893c10741ddbf613989f7",
+          "download_size": 4969,
+          "install_size": 2478
+        }
+      ]
+    }
+  ]
+}

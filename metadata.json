@@ -1,0 +1,24 @@
+{
+  "name": "DTU and EKB Components Library",
+  "description": "Collaborative KiCad library for DTU Ballerup Campus.",
+  "description_full": "A collaborative collection of KiCad symbols, footprints and datasheets, maintained for students at DTU Ballerup Campus. To be used by students and The goal is to provide consistent, verified components for coursework and projects.",
+  "identifier": "dtu-ekb-components",
+  "type": "library",
+  "author": {
+    "name": "DTU and EKB Contributors",
+    "contact": {
+      "github": "https://github.com/DTU-EKB/KiCad-components"
+    }
+  },
+  "license": "MIT",
+  "resources": {
+    "Repository": "https://github.com/DTU-EKB/KiCad-components"
+  },
+  "versions": [
+    {
+      "version": "1.0.0",
+      "status": "development",
+      "kicad_version": "9.0"
+    }
+  ]
+}

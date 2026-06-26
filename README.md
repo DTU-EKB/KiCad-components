@@ -15,10 +15,20 @@ If you find missing components, footprints and datasheets, please consider contr
 ---
 ## Table of components in the component shop
 
-|**Component** | **Type** | **Location** | **Datasheet** |
-|--------------|----------|-------------------|---|
-| MCP6002 | Op-Amp | CSM | [Datasheet (In repo)](https://github.com/DTU-EKB/KiCad-components/blob/main/datasheets/MCP6001-1R-1U-2-4-1-MHz-Low-Power-Op-Amp-DS20001733L.pdf) |
+|**Component**  | **Type** | **Location** | **Datasheet** | **KiCad footprint** |
+|---------------|----------|--------------|---------------|---------------------|
+| Resistors     |          | CSM          |               | Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P7.62mm_Horizontal |
+| Diodes        |          | CSM          |               | Diode_THT:D_DO-35_SOD27_P7.62mm_Horizontal |
+| MCP6002       | Op-Amp   | CSM          | [Datasheet (In repo)](https://github.com/DTU-EKB/KiCad-components/blob/main/datasheets/MCP6001-1R-1U-2-4-1-MHz-Low-Power-Op-Amp-DS20001733L.pdf) | Package_DIP:DIP-8_W7.62mm_LongPads |
 
-### Location abbreviation:
-- CSM: DTU Ballerup Components shop main storage.
-- CSB: DTU Ballerup Components shop back room storage. You need to specifically ask a professor for this part.
+## Table of components in EKB
+
+|**Component**  | **Type** | **Location** | **Datasheet** | **KiCad footprint** |
+|---------------|----------|--------------|---------------|---------------------|
+| ESP32-wroom32 | SMD MCU  | EKBB         | [Datasheet (external)](https://documentation.espressif.com/esp32-wroom-32_datasheet_en.html) | |
+
+## Location abbreviation:
+- CSM:  DTU Ballerup Components shop main storage.
+- CSB:  DTU Ballerup Components shop back room storage. You need to specifically ask a professor for this part.
+- EKBM: EKB main storage: Can be found in komponents shelves in EKB. ***Membership needed***.
+- EKBB: EKB Basement/Backup storage: These components can be given upon request, if still in stock. ***Membership needed***.

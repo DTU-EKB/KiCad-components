@@ -35,7 +35,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Diode_THT:D_DO-41_SOD81_P10.16mm_Horizontal"
 			(at 0 0 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -223,7 +223,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Diode_THT:D_DO-41_SOD81_P10.16mm_Horizontal"
 			(at 0 0 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -389,7 +389,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Diode_THT:D_DO-35_SOD27_P7.62mm_Horizontal"
 			(at 0 0 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3094,7 +3094,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Package_DIP:DIP-6_W7.62mm_LongPads"
 			(at 0 0 0)
 			(show_name no)
 			(do_not_autoplace no)

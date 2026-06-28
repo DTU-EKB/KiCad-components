@@ -15,6 +15,8 @@ If you find missing components, footprints and datasheets, please consider contr
 ---
 ## Table of components in the component shop
 
+> Full machine-readable inventory: [`Components/parts/dtu_component_shop.csv`](Components/parts/dtu_component_shop.csv) (1464 parts). See [`Components/CONVENTION.md`](Components/CONVENTION.md) for the passives convention.
+
 |**Component**  | **Type** | **Location** | **Datasheet** | **KiCad footprint** |
 |---------------|----------|--------------|---------------|---------------------|
 | Resistors     |          | CSM          |               | Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P7.62mm_Horizontal |

@@ -4970,7 +4970,7 @@
 		(property "Shop_Location" "CSM" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
 	)
 	(symbol "IRF540"
-		(extends "IRF540N")
+		(extends "BUZ11")
 		(property "Reference" "Q" (at 0 0 0) (effects (font (size 1.27 1.27))))
 		(property "Value" "IRF540" (at 0 0 0) (effects (font (size 1.27 1.27))))
 		(property "Footprint" "Package_TO_SOT_THT:TO-220-3_Vertical" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
@@ -4979,7 +4979,7 @@
 		(property "Shop_Location" "CSM" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
 	)
 	(symbol "MCP601"
-		(extends "TL071")
+		(extends "LM741")
 		(property "Reference" "U" (at 0 0 0) (effects (font (size 1.27 1.27))))
 		(property "Value" "MCP601" (at 0 0 0) (effects (font (size 1.27 1.27))))
 		(property "Footprint" "Package_DIP:DIP-8_W7.62mm_LongPads" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
@@ -4988,7 +4988,7 @@
 		(property "Shop_Location" "kit" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
 	)
 	(symbol "NE555"
-		(extends "NE555P")
+		(extends "NE555D")
 		(property "Reference" "U" (at 0 0 0) (effects (font (size 1.27 1.27))))
 		(property "Value" "NE555" (at 0 0 0) (effects (font (size 1.27 1.27))))
 		(property "Footprint" "Package_DIP:DIP-8_W7.62mm_LongPads" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))

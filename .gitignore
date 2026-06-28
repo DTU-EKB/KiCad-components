@@ -41,3 +41,11 @@ fp-info-cache
 
 # Local project settings
 *.kicad_prl
+
+# Project parts data — keep these despite the *.csv rule above
+!Components/parts/*.csv
+
+# Python tooling (symbol build script)
+__pycache__/
+*.pyc
+.pytest_cache/

@@ -1,10 +1,10 @@
 part,source_lib,source_symbol,footprint,datasheet,shop_location,description
-1N4148,Diode,D,Diode_THT:D_DO-35_SOD27_P7.62mm_Horizontal,https://www.vishay.com/docs/81857/1n4148.pdf,CSM,Signal diode 100V 200mA DO-35
-1N4006,Diode,D,Diode_THT:D_DO-41_SOD81_P10.16mm_Horizontal,https://www.vishay.com/docs/88503/1n4001.pdf,CSM,Rectifier diode 800V 1A DO-41
-1N5817,Diode,D_Schottky,Diode_THT:D_DO-41_SOD81_P10.16mm_Horizontal,https://www.vishay.com/docs/88525/1n5817.pdf,CSM,Schottky 20V 1A DO-41
-1N5822,Diode,D_Schottky,Diode_THT:D_DO-201AD_P15.24mm_Horizontal,https://www.onsemi.com/pdf/datasheet/1n5820-d.pdf,order,Schottky 40V 3A DO-201AD (order - not in shop)
-BZX55C5V1,Diode,D_Zener,Diode_THT:D_DO-35_SOD27_P7.62mm_Horizontal,https://www.vishay.com/docs/85604/bzx55.pdf,CSM,Zener 5.1V 0.5W DO-35
-BZX55C3V0,Diode,D_Zener,Diode_THT:D_DO-35_SOD27_P7.62mm_Horizontal,https://www.vishay.com/docs/85604/bzx55.pdf,CSM,Zener 3.0V 0.5W DO-35
+1N4148,Device,D,Diode_THT:D_DO-35_SOD27_P7.62mm_Horizontal,https://www.vishay.com/docs/81857/1n4148.pdf,CSM,Signal diode 100V 200mA DO-35
+1N4006,Device,D,Diode_THT:D_DO-41_SOD81_P10.16mm_Horizontal,https://www.vishay.com/docs/88503/1n4001.pdf,CSM,Rectifier diode 800V 1A DO-41
+1N5817,Device,D_Schottky,Diode_THT:D_DO-41_SOD81_P10.16mm_Horizontal,https://www.vishay.com/docs/88525/1n5817.pdf,CSM,Schottky 20V 1A DO-41
+1N5822,Device,D_Schottky,Diode_THT:D_DO-201AD_P15.24mm_Horizontal,https://www.onsemi.com/pdf/datasheet/1n5820-d.pdf,order,Schottky 40V 3A DO-201AD (order - not in shop)
+BZX55C5V1,Device,D_Zener,Diode_THT:D_DO-35_SOD27_P7.62mm_Horizontal,https://www.vishay.com/docs/85604/bzx55.pdf,CSM,Zener 5.1V 0.5W DO-35
+BZX55C3V0,Device,D_Zener,Diode_THT:D_DO-35_SOD27_P7.62mm_Horizontal,https://www.vishay.com/docs/85604/bzx55.pdf,CSM,Zener 3.0V 0.5W DO-35
 IRF530,Transistor_FET,Q_NMOS_GDS,Package_TO_SOT_THT:TO-220-3_Vertical,https://www.vishay.com/docs/91019/irf530.pdf,CSM,N-MOSFET 100V 14A TO-220 (G-D-S)
 IRF540,Transistor_FET,IRF540N,Package_TO_SOT_THT:TO-220-3_Vertical,https://www.vishay.com/docs/91021/irf540.pdf,CSM,N-MOSFET 100V 28A TO-220 (G-D-S)
 TIP41A,Transistor_BJT,TIP41A,Package_TO_SOT_THT:TO-220-3_Vertical,https://www.onsemi.com/pdf/datasheet/tip41a-d.pdf,CSM,NPN BJT 60V 6A TO-220

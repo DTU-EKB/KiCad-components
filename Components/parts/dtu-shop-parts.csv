@@ -1,0 +1,19 @@
+part,source_lib,source_symbol,footprint,datasheet,shop_location,description
+1N4148,Diode,D,Diode_THT:D_DO-35_SOD27_P7.62mm_Horizontal,https://www.vishay.com/docs/81857/1n4148.pdf,CSM,Signal diode 100V 200mA DO-35
+1N4006,Diode,D,Diode_THT:D_DO-41_SOD81_P10.16mm_Horizontal,https://www.vishay.com/docs/88503/1n4001.pdf,CSM,Rectifier diode 800V 1A DO-41
+1N5817,Diode,D_Schottky,Diode_THT:D_DO-41_SOD81_P10.16mm_Horizontal,https://www.vishay.com/docs/88525/1n5817.pdf,CSM,Schottky 20V 1A DO-41
+1N5822,Diode,D_Schottky,Diode_THT:D_DO-201AD_P15.24mm_Horizontal,https://www.onsemi.com/pdf/datasheet/1n5820-d.pdf,order,Schottky 40V 3A DO-201AD (order - not in shop)
+BZX55C5V1,Diode,D_Zener,Diode_THT:D_DO-35_SOD27_P7.62mm_Horizontal,https://www.vishay.com/docs/85604/bzx55.pdf,CSM,Zener 5.1V 0.5W DO-35
+BZX55C3V0,Diode,D_Zener,Diode_THT:D_DO-35_SOD27_P7.62mm_Horizontal,https://www.vishay.com/docs/85604/bzx55.pdf,CSM,Zener 3.0V 0.5W DO-35
+IRF530,Transistor_FET,Q_NMOS_GDS,Package_TO_SOT_THT:TO-220-3_Vertical,https://www.vishay.com/docs/91019/irf530.pdf,CSM,N-MOSFET 100V 14A TO-220 (G-D-S)
+IRF540,Transistor_FET,IRF540N,Package_TO_SOT_THT:TO-220-3_Vertical,https://www.vishay.com/docs/91021/irf540.pdf,CSM,N-MOSFET 100V 28A TO-220 (G-D-S)
+TIP41A,Transistor_BJT,TIP41A,Package_TO_SOT_THT:TO-220-3_Vertical,https://www.onsemi.com/pdf/datasheet/tip41a-d.pdf,CSM,NPN BJT 60V 6A TO-220
+LM358,Amplifier_Operational,LM358,Package_DIP:DIP-8_W7.62mm_LongPads,https://www.ti.com/lit/ds/symlink/lm358.pdf,CSM,Dual op-amp DIP-8
+MCP601,Amplifier_Operational,TL071,Package_DIP:DIP-8_W7.62mm_LongPads,https://ww1.microchip.com/downloads/en/DeviceDoc/21314g.pdf,kit,Single op-amp 2.8MHz DIP-8 (kit part)
+NE555,Timer,NE555P,Package_DIP:DIP-8_W7.62mm_LongPads,https://www.ti.com/lit/ds/symlink/ne555.pdf,CSM,Timer DIP-8
+LM7805,Regulator_Linear,LM7805_TO220,Package_TO_SOT_THT:TO-220-3_Vertical,https://www.onsemi.com/pdf/datasheet/mc7800-d.pdf,CSM,5V linear regulator TO-220 (IN-GND-OUT)
+4N25,Isolator,4N25,Package_DIP:DIP-6_W7.62mm_LongPads,https://www.vishay.com/docs/83725/4n25.pdf,CSM,Optocoupler phototransistor DIP-6
+CNY17,Isolator,CNY17-1,Package_DIP:DIP-6_W7.62mm_LongPads,https://www.vishay.com/docs/83606/cny17.pdf,CSM,Optocoupler phototransistor DIP-6
+IR2110,Driver_FET,IR2110,Package_DIP:DIP-14_W7.62mm_LongPads,https://www.infineon.com/dgdl/Infineon-IR2110-DataSheet-v01_00-EN.pdf,kit,High/low-side gate driver DIP-14 (kit part)
+ILD74,Isolator,ILD74,Package_DIP:DIP-8_W7.62mm_LongPads,https://www.vishay.com/docs/83663/ild74.pdf,kit,Dual optocoupler DIP-8 (kit part)
+IL300,Isolator_Analog,IL300,Package_DIP:DIP-8_W7.62mm_LongPads,https://www.vishay.com/docs/83622/il300.pdf,kit,Linear optocoupler DIP-8 (kit part)

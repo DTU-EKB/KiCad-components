@@ -78,21 +78,46 @@ def rename_symbol(sym, new_name):
                 u.libId = new_un
 
 
+def ensure_extends_parents(sym, src_lib, out, already_present):
+    """Recursively copy the extends-parent chain of `sym` from `src_lib` into `out`.
+
+    KiCad resolves `extends` only within the same .kicad_sym file, so every
+    ancestor must be present in the output lib.  `already_present` is the set
+    of symbol names already in `out` (updated in place).
+    """
+    parent_name = getattr(sym, "extends", None)
+    if not parent_name or parent_name in already_present:
+        return
+    parent = find(src_lib, parent_name)
+    parent_clone = copy.deepcopy(parent)
+    out.symbols.append(parent_clone)
+    already_present.add(parent_name)
+    # Recurse in case the parent itself extends something
+    ensure_extends_parents(parent, src_lib, out, already_present)
+
+
 def main():
     rows = list(csv.DictReader(open(CSV, encoding="utf-8")))
     out = SymbolLib(version="20251024", generator="dtu_build_symbols")
     # Map (source_lib, source_symbol) -> cloned Symbol object in `out`
     copied_bases = {}
+    # Track all names written so far to avoid duplicates
+    names_in_out = set()
 
-    # Pass 1: copy each needed base/concrete stock symbol exactly once.
+    # Pass 1: copy each needed base/concrete stock symbol exactly once,
+    # then ensure all extends-ancestors are also present.
     for r in rows:
         key = (r["source_lib"], r["source_symbol"])
         if key in copied_bases:
             continue
-        src = find(stock_lib(r["source_lib"]), r["source_symbol"])
+        src_lib = stock_lib(r["source_lib"])
+        src = find(src_lib, r["source_symbol"])
         clone = copy.deepcopy(src)
         out.symbols.append(clone)
+        names_in_out.add(r["source_symbol"])
         copied_bases[key] = clone
+        # Pull in any missing ancestors so `extends` references resolve.
+        ensure_extends_parents(src, src_lib, out, names_in_out)
 
     # Pass 2: realize each catalog part.
     for r in rows:

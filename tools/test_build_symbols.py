@@ -35,3 +35,12 @@ def test_each_part_has_footprint_and_shop_location():
 def test_roundtrip_parses():
     # re-parse must not raise
     SymbolLib.from_file(str(OUT))
+
+def test_no_dangling_extends():
+    """Every (extends "X") target must exist as a top-level symbol in the file."""
+    import re
+    text = OUT.read_text(encoding="utf-8")
+    names = set(re.findall(r'\(symbol "([^"]+)"', text))
+    extends_targets = set(re.findall(r'\(extends "([^"]+)"', text))
+    dangling = sorted(e for e in extends_targets if e not in names)
+    assert dangling == [], f"dangling extends targets: {dangling}"

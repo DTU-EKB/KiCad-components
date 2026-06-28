@@ -1,149 +1,179 @@
 #!/usr/bin/env python3
 """Generate dtu-ballerup-componentshop.kicad_sym from the curated CSV.
 
+Stock KiCad symbols are copied as VERBATIM TEXT blocks (not round-tripped
+through a parser) so that multi-unit symbol structure is preserved exactly --
+KiCad rejects libraries whose unit sub-symbol names get mangled.
+
 For each CSV row:
-  - part == source_symbol  -> copy that stock symbol verbatim, then override fields ("self")
-  - part != source_symbol  -> copy the base symbol once, then add a derived
-                              symbol `part (extends source_symbol)` with overridden fields
-Idempotent: fully regenerates the output file each run.
+  - part == source_symbol  -> copy that stock symbol verbatim, then override
+                              the catalog fields in place ("self")
+  - part != source_symbol  -> copy the base symbol once and add a small derived
+                              symbol `part (extends source_symbol)` ("derived")
+
+Every `extends` ancestor is copied too, because KiCad resolves inheritance only
+within a single library file. Idempotent: fully regenerates the output file.
 """
 import csv
-import copy
+import re
 from pathlib import Path
-from kiutils.symbol import SymbolLib, Symbol
-from kiutils.items.common import Property
 
 STOCK = Path(r"C:/Program Files/KiCad/10.0/share/kicad/symbols")
 REPO = Path(__file__).resolve().parents[1]
 CSV = REPO / "Components" / "parts" / "dtu-shop-parts.csv"
 OUT = REPO / "Components" / "symbols" / "dtu-ballerup-componentshop.kicad_sym"
 
-_stock_cache = {}
+HEADER = (
+    "(kicad_symbol_lib\n"
+    "\t(version 20251024)\n"
+    '\t(generator "kicad_symbol_editor")\n'
+    '\t(generator_version "10.0")'
+)
+
+_text_cache = {}
 
 
-def stock_lib(name):
-    if name not in _stock_cache:
-        _stock_cache[name] = SymbolLib.from_file(str(STOCK / f"{name}.kicad_sym"))
-    return _stock_cache[name]
+def stock_text(libname):
+    if libname not in _text_cache:
+        _text_cache[libname] = (STOCK / f"{libname}.kicad_sym").read_text(encoding="utf-8")
+    return _text_cache[libname]
 
 
-def sym_name(sym):
-    return getattr(sym, "entryName", None) or getattr(sym, "libId", None)
+def esc(v):
+    return v.replace("\\", "\\\\").replace('"', '\\"')
 
 
-def find(lib, name):
-    for s in lib.symbols:
-        if sym_name(s) == name:
-            return s
-    raise KeyError(f"{name} not found in {lib.filePath}")
+def block_end(text, open_idx):
+    """Return the index just past the ')' that closes the '(' at/after open_idx,
+    respecting double-quoted strings and backslash escapes."""
+    depth = 0
+    in_str = False
+    escaped = False
+    for j in range(open_idx, len(text)):
+        c = text[j]
+        if in_str:
+            if escaped:
+                escaped = False
+            elif c == "\\":
+                escaped = True
+            elif c == '"':
+                in_str = False
+        else:
+            if c == '"':
+                in_str = True
+            elif c == "(":
+                depth += 1
+            elif c == ")":
+                depth -= 1
+                if depth == 0:
+                    return j + 1
+    raise ValueError("unbalanced parentheses")
 
 
-def get_prop(sym, key):
-    for p in sym.properties:
-        if p.key == key:
-            return p
-    return None
+def extract_block(libname, name):
+    """Return the verbatim top-level (symbol "name" ...) block text from a stock lib."""
+    text = stock_text(libname)
+    m = re.search(r'(?m)^\t\(symbol "%s"' % re.escape(name), text)
+    if not m:
+        raise KeyError(f"{name} not found in {libname}.kicad_sym")
+    start = m.start()
+    paren = text.index("(", start)
+    return text[start:block_end(text, paren)]
 
 
-def set_prop(sym, key, value):
-    p = get_prop(sym, key)
-    if p is None:
-        sym.properties.append(Property(key=key, value=value))
-    else:
-        p.value = value
+def base_ref(blk):
+    m = re.search(r'\(property "Reference" "([^"]*)"', blk)
+    return m.group(1) if m else "U"
 
 
-def apply_fields(sym, row):
-    set_prop(sym, "Value", row["part"])
-    set_prop(sym, "Footprint", row["footprint"])
-    set_prop(sym, "Datasheet", row["datasheet"])
-    set_prop(sym, "Description", row["description"])
-    set_prop(sym, "Shop_Location", row["shop_location"])
+def set_prop_value(blk, key, value):
+    pat = r'(\(property "%s" )"(?:\\.|[^"\\])*"' % re.escape(key)
+    return re.sub(pat, lambda m: m.group(1) + '"' + esc(value) + '"', blk, count=1)
 
 
-def rename_symbol(sym, new_name):
-    """Rename a concrete symbol and any child unit symbols that embed the parent name."""
-    old_name = sym_name(sym)
-    if hasattr(sym, "entryName"):
-        sym.entryName = new_name
-    if hasattr(sym, "libId"):
-        sym.libId = new_name
-    for u in getattr(sym, "units", []) or []:
-        un = sym_name(u)
-        if un and old_name and un.startswith(old_name):
-            new_un = new_name + un[len(old_name):]
-            if hasattr(u, "entryName"):
-                u.entryName = new_un
-            if hasattr(u, "libId"):
-                u.libId = new_un
+def inject_after_reference(blk, props_text):
+    i = blk.index('(property "Reference"')
+    end = block_end(blk, blk.index("(", i))
+    return blk[:end] + "\n" + props_text.rstrip("\n") + blk[end:]
 
 
-def ensure_extends_parents(sym, src_lib, out, already_present):
-    """Recursively copy the extends-parent chain of `sym` from `src_lib` into `out`.
+def apply_self_fields(blk, row):
+    """Override the catalog fields on a verbatim 'self' symbol block."""
+    fields = [
+        ("Value", row["part"]),
+        ("Footprint", row["footprint"]),
+        ("Datasheet", row["datasheet"]),
+        ("Description", row["description"]),
+        ("Shop_Location", row["shop_location"]),
+    ]
+    inject = []
+    for key, val in fields:
+        if '(property "%s" "' % key in blk:
+            blk = set_prop_value(blk, key, val)
+        else:
+            inject.append((key, val))
+    if inject:
+        props = "".join(
+            '\t\t(property "%s" "%s" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))\n'
+            % (k, esc(v))
+            for k, v in inject
+        )
+        blk = inject_after_reference(blk, props)
+    return blk
 
-    KiCad resolves `extends` only within the same .kicad_sym file, so every
-    ancestor must be present in the output lib.  `already_present` is the set
-    of symbol names already in `out` (updated in place).
-    """
-    parent_name = getattr(sym, "extends", None)
-    if not parent_name or parent_name in already_present:
-        return
-    parent = find(src_lib, parent_name)
-    parent_clone = copy.deepcopy(parent)
-    out.symbols.append(parent_clone)
-    already_present.add(parent_name)
-    # Recurse in case the parent itself extends something
-    ensure_extends_parents(parent, src_lib, out, already_present)
+
+def make_derived(row, base_blk):
+    ref = base_ref(base_blk)
+    p = lambda k, v, hide: '\t\t(property "%s" "%s" (at 0 0 0) (effects (font (size 1.27 1.27))%s))' % (
+        k, esc(v), " (hide yes)" if hide else "")
+    return "\n".join([
+        '\t(symbol "%s"' % row["part"],
+        '\t\t(extends "%s")' % row["source_symbol"],
+        p("Reference", ref, False),
+        p("Value", row["part"], False),
+        p("Footprint", row["footprint"], True),
+        p("Datasheet", row["datasheet"], True),
+        p("Description", row["description"], True),
+        p("Shop_Location", row["shop_location"], True),
+        "\t)",
+    ])
 
 
 def main():
     rows = list(csv.DictReader(open(CSV, encoding="utf-8")))
-    out = SymbolLib(version="20251024", generator="dtu_build_symbols")
-    # Map (source_lib, source_symbol) -> cloned Symbol object in `out`
-    copied_bases = {}
-    # Track all names written so far to avoid duplicates
-    names_in_out = set()
 
-    # Pass 1: copy each needed base/concrete stock symbol exactly once,
-    # then ensure all extends-ancestors are also present.
+    ordered = []          # symbol names in output order
+    block_by_name = {}    # name -> block text
+    base_lib = {}         # base symbol name -> its source lib (for parent lookups)
+
+    def emit_base(libname, name):
+        if name in block_by_name:
+            return
+        blk = extract_block(libname, name)
+        # Emit any extends-parent (same lib) first so ancestors precede children.
+        pm = re.search(r'\(extends "([^"]+)"', blk)
+        if pm:
+            emit_base(libname, pm.group(1))
+        block_by_name[name] = blk
+        base_lib[name] = libname
+        ordered.append(name)
+
+    # Pass 1: emit every base/concrete stock symbol (and its ancestor chain).
     for r in rows:
-        key = (r["source_lib"], r["source_symbol"])
-        if key in copied_bases:
-            continue
-        src_lib = stock_lib(r["source_lib"])
-        src = find(src_lib, r["source_symbol"])
-        clone = copy.deepcopy(src)
-        out.symbols.append(clone)
-        names_in_out.add(r["source_symbol"])
-        copied_bases[key] = clone
-        # Pull in any missing ancestors so `extends` references resolve.
-        ensure_extends_parents(src, src_lib, out, names_in_out)
+        emit_base(r["source_lib"], r["source_symbol"])
 
     # Pass 2: realize each catalog part.
     for r in rows:
-        base = copied_bases[(r["source_lib"], r["source_symbol"])]
         if r["part"] == r["source_symbol"]:
-            # "self" case: the base symbol IS this catalog part — rename & apply fields
-            rename_symbol(base, r["part"])
-            apply_fields(base, r)
+            block_by_name[r["part"]] = apply_self_fields(block_by_name[r["part"]], r)
         else:
-            # Derived case: add a new symbol that extends the base
-            ref_prop = get_prop(base, "Reference")
-            ref = ref_prop.value if ref_prop else "U"
-            derived = Symbol(
-                entryName=r["part"],
-                extends=sym_name(base),
-                inBom=True,
-                onBoard=True,
-            )
-            apply_fields(derived, r)
-            # Set Reference to match base
-            set_prop(derived, "Reference", ref)
-            out.symbols.append(derived)
+            block_by_name[r["part"]] = make_derived(r, block_by_name[r["source_symbol"]])
+            ordered.append(r["part"])
 
+    content = HEADER + "\n" + "\n".join(block_by_name[n] for n in ordered) + "\n)\n"
     OUT.parent.mkdir(parents=True, exist_ok=True)
-    out.to_file(str(OUT))
-    print(f"wrote {OUT} with {len(out.symbols)} symbols")
+    OUT.write_text(content, encoding="utf-8", newline="\n")
+    print(f"wrote {OUT} with {len(ordered)} symbols")
 
 
 if __name__ == "__main__":

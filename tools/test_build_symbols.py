@@ -44,3 +44,17 @@ def test_no_dangling_extends():
     extends_targets = set(re.findall(r'\(extends "([^"]+)"', text))
     dangling = sorted(e for e in extends_targets if e not in names)
     assert dangling == [], f"dangling extends targets: {dangling}"
+
+def test_kicad_cli_loads(tmp_path):
+    """The real gate: KiCad itself must be able to load the generated library.
+    kiutils parsing is not enough -- it accepts files KiCad rejects."""
+    import shutil, pytest
+    cli = Path(r"C:/Program Files/KiCad/10.0/bin/kicad-cli.exe")
+    if not cli.exists():
+        pytest.skip("kicad-cli not found")
+    tmp = tmp_path / "loadtest.kicad_sym"
+    shutil.copy(OUT, tmp)
+    r = subprocess.run([str(cli), "sym", "upgrade", "--force", str(tmp)],
+                       capture_output=True, text=True)
+    out = r.stdout + r.stderr
+    assert r.returncode == 0 and "Unable to load" not in out, out

@@ -17,3 +17,4 @@ CNY17,Isolator,CNY17-1,Package_DIP:DIP-6_W7.62mm_LongPads,https://www.vishay.com
 IR2110,Driver_FET,IR2110,Package_DIP:DIP-14_W7.62mm_LongPads,https://www.infineon.com/dgdl/Infineon-IR2110-DataSheet-v01_00-EN.pdf,kit,High/low-side gate driver DIP-14 (kit part)
 ILD74,Isolator,ILD74,Package_DIP:DIP-8_W7.62mm_LongPads,https://www.vishay.com/docs/83663/ild74.pdf,kit,Dual optocoupler DIP-8 (kit part)
 IL300,Isolator_Analog,IL300,Package_DIP:DIP-8_W7.62mm_LongPads,https://www.vishay.com/docs/83622/il300.pdf,kit,Linear optocoupler DIP-8 (kit part)
+LM317T,Regulator_Linear,LM317_TO-220,Package_TO_SOT_THT:TO-220-3_Vertical,https://www.ti.com/lit/ds/symlink/lm317.pdf,CSM,Adjustable 1.2-37V 1.5A regulator TO-220 (ADJ-OUT-IN)
